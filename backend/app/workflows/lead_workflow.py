@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from ..database import SessionLocal
 from ..models import Lead
 from ..services.ai_classifier import classify_lead
+from ..services.auto_response import get_auto_response
+from ..services.lead_service import update_lead_category, update_lead_status
 
 
 def start_lead_workflow(lead_id: int):
@@ -18,9 +20,8 @@ def start_lead_workflow(lead_id: int):
 
     # STEP 1: AI Categorization
     result = classify_lead(lead.message)
-    lead.category = result["category"]
-    lead.status = "CATEGORIZED"
-    db.commit()
+    update_lead_category(db, lead, result["category"])
+
 
     # STEP 2: Branch workflow
     if lead.category == "Hot Lead":
@@ -36,32 +37,41 @@ def start_lead_workflow(lead_id: int):
 
 
 def handle_hot_lead(lead: Lead, db: Session):
-    lead.status = "AUTO_RESPONDED"
-    db.commit()
+    message = get_auto_response("Hot Lead")
+    print(f"[Auto-response] {message}")
+
+    update_lead_status(db, lead, "AUTO_RESPONDED")
 
     print(f"[Mastra] Hot lead {lead.id}: Auto-response sent")
     print("[Mastra] Waiting 12 hours for human action...")
+
     
 
 def handle_medium_lead(lead: Lead, db: Session):
-    lead.status = "INFO_SENT"
-    db.commit()
+    message = get_auto_response("Medium Lead")
+    print(f"[Auto-response] {message}")
+
+    update_lead_status(db, lead, "INFO_SENT")
 
     print(f"[Mastra] Medium lead {lead.id}: Info sent")
     print("[Mastra] Waiting 24 hours for optional follow-up...")
 
 
 def handle_low_lead(lead: Lead, db: Session):
-    lead.status = "INFO_SENT"
-    db.commit()
+    message = get_auto_response("Low Lead")
+    print(f"[Auto-response] {message}")
+
+    update_lead_status(db, lead, "INFO_SENT")
 
     print(f"[Mastra] Low lead {lead.id}: Info sent")
     print("[Mastra] Workflow ended")
 
 
 def handle_support_lead(lead: Lead, db: Session):
-    lead.status = "SUPPORT_ROUTED"
-    db.commit()
+    message = get_auto_response("Support Lead")
+    print(f"[Auto-response] {message}")
+
+    update_lead_status(db, lead, "SUPPORT_ROUTED")
 
     print(f"[Mastra] Support inquiry {lead.id}: Routed to support")
     print("[Mastra] Workflow ended")
