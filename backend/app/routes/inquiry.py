@@ -24,6 +24,6 @@ def create_inquiry(lead: LeadCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_lead)
 
-    # Mastra workflow will be triggered here later
+    # Mastra workflow will be triggered here
     start_lead_workflow(new_lead.id)
     return new_lead

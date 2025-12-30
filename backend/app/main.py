@@ -6,6 +6,8 @@ from .routes import inquiry,admin
 
 app = FastAPI(title="AEC Lead Automation")
 
+#for stopping the error in front end
+#will check on this after
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],       

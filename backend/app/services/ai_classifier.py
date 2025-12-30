@@ -25,7 +25,7 @@ Respond with ONLY the category name.
 
 def classify_lead(message: str):
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant", 
+        model="llama-3.1-8b-instant", # have to try other model. maybe better to go something small.
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": message}

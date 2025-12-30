@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
-
+#we can add other later stages
 class LeadCreate(BaseModel):
     name: str
     email: EmailStr

@@ -2,9 +2,11 @@ from sqlalchemy.orm import Session
 from ..database import SessionLocal
 from ..models import Lead
 
+#some random data
 
 def seed_data():
     db: Session = SessionLocal()
+
 
     sample_leads = [
         Lead(
@@ -13,8 +15,11 @@ def seed_data():
             product="Flooring",
             message="Please share catalogue",
             status="NEW"
+            
+            
         ),
         Lead(
+            
             name="Demo Architects",
             email="demo@arch.com",
             product="Lighting",
@@ -25,6 +30,7 @@ def seed_data():
 
     db.add_all(sample_leads)
     db.commit()
+    
     db.close()
 
 

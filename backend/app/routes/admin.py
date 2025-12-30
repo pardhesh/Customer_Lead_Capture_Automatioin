@@ -7,13 +7,13 @@ from ..workflows.lead_workflow import check_follow_up
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
-
+#get
 @router.get("/leads")
 def get_all_leads(db: Session = Depends(get_db)):
     leads = db.query(Lead).order_by(Lead.created_at.desc()).all()
     return leads
 
-
+#rest of post routes(will update let's see)
 @router.post("/leads/{lead_id}/mark-contacted")
 def mark_lead_contacted(lead_id: int, db: Session = Depends(get_db)):
     lead = db.query(Lead).filter(Lead.id == lead_id).first()
